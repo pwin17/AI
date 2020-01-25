@@ -10,9 +10,10 @@ class Node():
         self.status = status
         self.parent = parent
 
+#New function that takes in a maze and a starting point and performs DFS 
+#def dfs(node, maze):
 def single_dfs(file_location):
     file = open(f"{file_location}", "r")
-    position = 0
     row_length = 0
     column_length = 1
     for i in file.readline():
@@ -26,13 +27,15 @@ def single_dfs(file_location):
     for i in file.readlines():
         x = -1
         for f in i:
+            if f == "P":
+                sp = [x,y]
             if f != "\n":
                 x+=1
                 maze[y][x] = Node(f)
         y+=1
-    
-    for i in maze:
-        print(i)
+    our_stack = [maze[sp[0]][sp[1]]]
+    while our_stack != []:
+        pass
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Takes in maze file location and outputs")
