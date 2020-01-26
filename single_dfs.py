@@ -14,13 +14,8 @@ class Node():
 #def dfs(node, maze):
 def single_dfs(file_location):
     file = open(f"{file_location}", "r")
-    row_length = 0
-    column_length = 1
-    for i in file.readline():
-        if i != "\n":
-            row_length+=1
-    for i in file.readlines():
-        column_length+=1
+    row_length = len(file.readline())-1
+    column_length = len(file.readlines())+1
     file.seek(0)
     maze = [[0 for x in range(row_length)] for y in range(column_length)]
     y = 0
@@ -28,14 +23,14 @@ def single_dfs(file_location):
         x = -1
         for f in i:
             if f == "P":
-                sp = [x,y]
+                sp = [y,x]
             if f != "\n":
                 x+=1
                 maze[y][x] = Node(f)
         y+=1
     our_stack = [maze[sp[0]][sp[1]]]
     while our_stack != []:
-        pass
+        break
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Takes in maze file location and outputs")
