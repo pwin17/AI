@@ -77,14 +77,18 @@ def single_dfs(file_location):
     #     for f in i:
     #         x.append(f.status)
     #     print(x)
-
+    expanded_nodes = 0
+    path_cost = 0
     while our_stack != []:
         transition = dfs(our_stack[len(our_stack)-1], maze)
         if transition:
+            expanded_nodes+=1
+            path_cost+=1
             if transition == "found": #found prize
                 break
             our_stack.append(transition)
         else:
+            path_cost-=1
             unmark = our_stack.pop()
             maze.m[unmark[0]][unmark[1]].status = " "
     for i in maze.m:
@@ -92,6 +96,7 @@ def single_dfs(file_location):
         for f in i:
             x+=f.status
         print(x)
+    print(f"Path Cost: {path_cost}\nExpanded Nodes: {expanded_nodes}")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Takes in maze file location and outputs")
