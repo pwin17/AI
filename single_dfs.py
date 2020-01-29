@@ -85,7 +85,8 @@ def single_dfs(file_location):
                 break
             our_stack.append(transition)
         else:
-            our_stack.pop()
+            unmark = our_stack.pop()
+            maze.m[unmark[0]][unmark[1]].status = " "
     for i in maze.m:
         x = ""
         for f in i:
