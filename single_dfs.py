@@ -17,7 +17,7 @@ class Maze():
         self.row_length = row_length
         self.column_length = column_length
 
-#New function that takes in a maze and a starting point and performs a search 
+#Transition Function that takes in a maze and a starting point and performs a NESW search
 def dfs(position, maze):
     if position[0]-1 >= 0 and maze.m[position[0]-1][position[1]].status != "%" and maze.m[position[0]-1][position[1]].traveled == False:
         if maze.m[position[0]-1][position[1]].status ==".":
@@ -72,6 +72,7 @@ def single_dfs(file_location):
     #DFS uses a stack LIFO
     our_stack = [[sp[0],sp[1]]]
     maze.m[sp[0]][sp[1]].traveled = True
+    #To print the maze
     # for i in maze.m:
     #     x = []
     #     for f in i:
@@ -81,6 +82,7 @@ def single_dfs(file_location):
     path_cost = 0
     while our_stack != []:
         transition = dfs(our_stack[len(our_stack)-1], maze)
+        #Goal Test
         if transition:
             expanded_nodes+=1
             path_cost+=1
