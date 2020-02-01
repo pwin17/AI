@@ -5,13 +5,11 @@ class Node():
     def __init__(self, status = "0", parent = None):
         self.status = status
         self.parent = parent
-        # self.north = None
+        self.heuristic = 0
         # self.east = None
         # self.west = None
         # self.south = None
         self.traveled = False
-
-
     
 class Maze():
     def __init__(self, maze, row_length, column_length):
