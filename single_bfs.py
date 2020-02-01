@@ -28,21 +28,21 @@ def bfs(maze, position):
         maze.m[position[0]-1][position[1]].parent = maze.m[position[0]][position[1]] #marks parent of north as current
         frontier.append([position[0]-1,position[1]]) #appends north to frontier
 
-    elif position[1]+1 <= maze.row_length-1 and maze.m[position[0]][position[1]+1].status != "%" and maze.m[position[0]][position[1]+1].traveled == False:
+    if position[1]+1 <= maze.row_length-1 and maze.m[position[0]][position[1]+1].status != "%" and maze.m[position[0]][position[1]+1].traveled == False:
         if maze.m[position[0]][position[1]+1].status ==".":
             maze.m[position[0]][position[1]+1].parent = maze.m[position[0]][position[1]]
             return ["found",position[0],position[1]+1]
         maze.m[position[0]][position[1]+1].traveled = True
         maze.m[position[0]][position[1]+1].parent = maze.m[position[0]][position[1]]
         frontier.append([position[0],position[1]+1])
-    elif position[0]+1 <= maze.column_length-1 and maze.m[position[0]+1][position[1]].status != "%" and maze.m[position[0]+1][position[1]].traveled == False:
+    if position[0]+1 <= maze.column_length-1 and maze.m[position[0]+1][position[1]].status != "%" and maze.m[position[0]+1][position[1]].traveled == False:
         if maze.m[position[0]+1][position[1]].status ==".":
             maze.m[position[0]+1][position[1]].parent = maze.m[position[0]][position[1]]
             return ["found",position[0]+1,position[1]]
         maze.m[position[0]+1][position[1]].traveled = True
         maze.m[position[0]+1][position[1]].parent = maze.m[position[0]][position[1]]
         frontier.append([position[0]+1,position[1]])
-    elif position[1]-1 >= 0 and maze.m[position[0]][position[1]-1].status != "%" and maze.m[position[0]][position[1]-1].traveled == False:
+    if position[1]-1 >= 0 and maze.m[position[0]][position[1]-1].status != "%" and maze.m[position[0]][position[1]-1].traveled == False:
         if maze.m[position[0]][position[1]-1].status ==".":
             maze.m[position[0]][position[1]-1].parent = maze.m[position[0]][position[1]]
             return ["found",position[0],position[1]-1]
@@ -69,7 +69,7 @@ def single_bfs(file_path):
         x = 0
         for f in i:
             if f == "P":
-                sp = [y,x] #starting point
+                sp = [y,x+1] #starting point
             if f == ".":
                 prizes.append([y,x]) #prize location
             if f != "\n":

@@ -89,12 +89,11 @@ def single_bfs(file_path):
     expanded_nodes = 0
     path_cost = 0
     while our_deque != []:
-        transition = bfs(maze, our_deque[0])
+        transition = bfs(maze, our_deque[len(our_deque)-1])
         #Goal Test
         if transition:
             if transition[0] == "found": #found prize
                 current = maze.m[transition[1]][transition[2]]
-                x = 100
                 while current.parent != None:
                     current.parent.status = "#"
                     path_cost+=1
@@ -109,9 +108,10 @@ def single_bfs(file_path):
                     if md_list[i] < minimum_heuristic:
                         minimum_heuristic = md_list[i]
                         position = i
+                print(transition)
+                print(md_list)
                 our_deque.append(transition[position])
                 maze.m[transition[position][0]][transition[position][1]].traveled = True
-                print(transition[position])
                 expanded_nodes+=1
                     # #[position1N, position2E, position3S]
                     # #calculate heuristics
@@ -125,7 +125,7 @@ def single_bfs(file_path):
                     # our_deque.append(i)
                     # expanded_nodes+=1
         else:
-            our_deque.popleft()
+            our_deque.pop()
 
     for i in maze.m:
         x = ""
