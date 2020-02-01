@@ -32,27 +32,31 @@ def bfs(maze, position):
             return ["found",position[0]-1,position[1]]
         maze.m[position[0]-1][position[1]].traveled = True #marks north as traveled
         maze.m[position[0]-1][position[1]].parent = maze.m[position[0]][position[1]] #marks parent of north as current
+        maze.m[position[0]-1][position[1]].status = "E"
         frontier.append([position[0]-1,position[1]]) #appends north to frontier
 
-    elif position[1]+1 <= maze.row_length-1 and maze.m[position[0]][position[1]+1].status != "%" and maze.m[position[0]][position[1]+1].traveled == False:
+    if position[1]+1 <= maze.row_length-1 and maze.m[position[0]][position[1]+1].status != "%" and maze.m[position[0]][position[1]+1].traveled == False:
         if maze.m[position[0]][position[1]+1].status ==".":
             maze.m[position[0]][position[1]+1].parent = maze.m[position[0]][position[1]]
             return ["found",position[0],position[1]+1]
         maze.m[position[0]][position[1]+1].traveled = True
+        maze.m[position[0]][position[1]+1].status = "E"
         maze.m[position[0]][position[1]+1].parent = maze.m[position[0]][position[1]]
         frontier.append([position[0],position[1]+1])
-    elif position[0]+1 <= maze.column_length-1 and maze.m[position[0]+1][position[1]].status != "%" and maze.m[position[0]+1][position[1]].traveled == False:
+    if position[0]+1 <= maze.column_length-1 and maze.m[position[0]+1][position[1]].status != "%" and maze.m[position[0]+1][position[1]].traveled == False:
         if maze.m[position[0]+1][position[1]].status ==".":
             maze.m[position[0]+1][position[1]].parent = maze.m[position[0]][position[1]]
             return ["found",position[0]+1,position[1]]
         maze.m[position[0]+1][position[1]].traveled = True
+        maze.m[position[0]+1][position[1]].status = "E"
         maze.m[position[0]+1][position[1]].parent = maze.m[position[0]][position[1]]
         frontier.append([position[0]+1,position[1]])
-    elif position[1]-1 >= 0 and maze.m[position[0]][position[1]-1].status != "%" and maze.m[position[0]][position[1]-1].traveled == False:
+    if position[1]-1 >= 0 and maze.m[position[0]][position[1]-1].status != "%" and maze.m[position[0]][position[1]-1].traveled == False:
         if maze.m[position[0]][position[1]-1].status ==".":
             maze.m[position[0]][position[1]-1].parent = maze.m[position[0]][position[1]]
             return ["found",position[0],position[1]-1]
         maze.m[position[0]][position[1]-1].traveled = True
+        maze.m[position[0]][position[1]-1].status = "E"
         maze.m[position[0]][position[1]-1].parent = maze.m[position[0]][position[1]]
         frontier.append([position[0],position[1]-1])
     return frontier
@@ -92,43 +96,39 @@ def single_bfs(file_path):
     maze.m[sp[0]][sp[1]].traveled = True
     expanded_nodes = 0
     path_cost = 0
-    while our_deque != []:
+    debug = False
+    debug_print = 0
+    transition = "start"
+    while transition != "found":
         transition = bfs(maze, our_deque[0])
         #Goal Test
+        if debug:
+            if debug_print % 100 == 0:
+                for i in maze.m:
+                    x = ""
+                    for f in i:
+                        x+=f.status
+                    print(x)
+        debug_print+=1
         if transition:
-            if transition[0] == "found": #found prize
-                current = maze.m[transition[1]][transition[2]]
-                x = 100
-                while current.parent != None:
-                    current.parent.status = "#"
-                    path_cost+=1
-                    current = current.parent
-                break
-            else:
-                md_list =[]
-                for i in transition:
-                    md_list.append(abs(ep[0] - i[0]) + abs(ep[1] - i[1]))
-                minimum_heuristic = float('inf')
-                for i in range(len(md_list)):
-                    if md_list[i] < minimum_heuristic:
-                        minimum_heuristic = md_list[i]
-                        position = i
-                our_deque.append(transition[position])
-                print(transition[position])
-                expanded_nodes+=1
-                    # #[position1N, position2E, position3S]
-                    # #calculate heuristics
-                    # #
-                    # #[heuristic1, heuristic2, heuristic3] take minimum
-                    # #position = 0
-                    # #min = something
-                    # #for i in range(len(heuristic_list)):
-                    # #
-                    
-                    # our_deque.append(i)
-                    # expanded_nodes+=1
-        else:
-            our_deque.popleft()
+            md_list =[]
+            for i in transition:
+                md_list.append(abs(ep[0] - i[0]) + abs(ep[1] - i[1]))
+            minimum_heuristic = float('inf')
+
+            for i in range(len(md_list)):
+                if md_list[i] < minimum_heuristic:
+                    minimum_heuristic = md_list[i]
+                    position = i
+            our_deque.append(transition[position])
+            # print(transition[position])
+            expanded_nodes+=1
+    current = maze.m[transition[1]][transition[2]]
+    x = 100
+    while current.parent != None:
+        current.parent.status = "#"
+        path_cost+=1
+        current = current.parent
 
     for i in maze.m:
         x = ""
