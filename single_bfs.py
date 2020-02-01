@@ -11,6 +11,7 @@ class Node():
         # self.south = None
         self.traveled = False
 
+
     
 class Maze():
     def __init__(self, maze, row_length, column_length):
@@ -18,11 +19,43 @@ class Maze():
         self.row_length = row_length
         self.column_length = column_length
 
-def bfs(maze, x_pos, y_pos):
+def bfs(maze, position):
     """2D maze, x and y coordinates of the starting point as input and returns goal status"""
-    if 0 <= x_pos <= maze.column_length-2 and 0 <= y_pos <= maze.row_length:
-        if maze.m[x_pos][y_pos].status == ".":
-            return "found"
+    frontier = []
+    if position[0]-1 >= 0 and maze.m[position[0]-1][position[1]].status != "%" and maze.m[position[0]-1][position[1]].traveled == False: #checks if north is a valid node
+        if maze.m[position[0]-1][position[1]].status ==".": #checks if north reaches a goal
+            maze.m[position[0]-1][position[1]].parent = maze.m[position[0]][position[1]]
+            return ["found",position[0]-1,position[1]]
+        maze.m[position[0]-1][position[1]].traveled = True #marks north as traveled
+        maze.m[position[0]-1][position[1]].parent = maze.m[position[0]][position[1]] #marks parent of north as current
+        frontier.append([position[0]-1,position[1]]) #appends north to frontier
+
+    elif position[1]+1 <= maze.row_length-1 and maze.m[position[0]][position[1]+1].status != "%" and maze.m[position[0]][position[1]+1].traveled == False:
+        if maze.m[position[0]][position[1]+1].status ==".":
+            maze.m[position[0]][position[1]+1].parent = maze.m[position[0]][position[1]]
+            return ["found",position[0],position[1]+1]
+        maze.m[position[0]][position[1]+1].traveled = True
+        maze.m[position[0]][position[1]+1].parent = maze.m[position[0]][position[1]]
+        frontier.append([position[0],position[1]+1])
+    elif position[0]+1 <= maze.column_length-1 and maze.m[position[0]+1][position[1]].status != "%" and maze.m[position[0]+1][position[1]].traveled == False:
+        if maze.m[position[0]+1][position[1]].status ==".":
+            maze.m[position[0]+1][position[1]].parent = maze.m[position[0]][position[1]]
+            return ["found",position[0]+1,position[1]]
+        maze.m[position[0]+1][position[1]].traveled = True
+        maze.m[position[0]+1][position[1]].parent = maze.m[position[0]][position[1]]
+        frontier.append([position[0]+1,position[1]])
+    elif position[1]-1 >= 0 and maze.m[position[0]][position[1]-1].status != "%" and maze.m[position[0]][position[1]-1].traveled == False:
+        if maze.m[position[0]][position[1]-1].status ==".":
+            maze.m[position[0]][position[1]-1].parent = maze.m[position[0]][position[1]]
+            return ["found",position[0],position[1]-1]
+        maze.m[position[0]][position[1]-1].traveled = True
+        maze.m[position[0]][position[1]-1].parent = maze.m[position[0]][position[1]]
+        frontier.append([position[0],position[1]-1])
+    return frontier
+    
+    # if 0 <= x_pos <= maze.column_length-2 and 0 <= y_pos <= maze.row_length:
+    #     if maze.m[x_pos][y_pos].status == ".":
+    #         return "found"
 
 def single_bfs(file_path):
     infile = open(file_path, "r")
@@ -46,11 +79,37 @@ def single_bfs(file_path):
                 x+=1
         y+=1
     
-    #BFS using LIFO 
-    our_deque = []
+    #BFS using FIFO 
+    our_deque = deque()
+    our_deque.append([sp[0],sp[1]])
     maze.m[sp[0]][sp[1]].traveled = True
     expanded_nodes = 0
     path_cost = 0
+    while our_deque != []:
+        transition = bfs(maze, our_deque[0])
+        #Goal Test
+        if transition:
+            if transition[0] == "found": #found prize
+                current = maze.m[transition[1]][transition[2]]
+                x = 100
+                while current.parent != None:
+                    current.parent.status = "#"
+                    path_cost+=1
+                    current = current.parent
+                break
+            else:
+                for i in transition:
+                    our_deque.append(i)
+                    expanded_nodes+=1
+        else:
+            our_deque.popleft()
+
+    for i in maze.m:
+        x = ""
+        for f in i:
+            x+=f.status
+        print(x)
+    print(f"Path Cost: {path_cost}\nExpanded Nodes: {expanded_nodes}")
     
 
     '''for i in maze.m:

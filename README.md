@@ -5,3 +5,4 @@ The input file should contain walls represented by "%", the starting agent repre
 
 <h2>Included Pathfinding Algorithms</h2>
 Depth-first Search (single_dfs.py)
+Breadth-first Search (single_bfs.py)
