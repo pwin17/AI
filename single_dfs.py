@@ -61,12 +61,12 @@ def single_dfs(file_location):
         x = -1
         for f in i:
             if f == "P":
-                sp = [y,x+1]
+                sp = [y,x+1] #starting point
             if f == ".":
-                prizes.append([y,x])
+                prizes.append([y,x]) #prize location
             if f != "\n":
                 x+=1
-                maze.m[y][x] = Node(f)
+                maze.m[y][x] = Node(f) #Walls and paths
         y+=1
 
     #DFS uses a stack LIFO
