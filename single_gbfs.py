@@ -25,12 +25,16 @@ class Heuristic():
 def bfs(maze, position):
     """2D maze, x and y coordinates of the starting point as input and returns goal status"""
     frontier = []
+    debug = False
     #calculate manhattan distance of NESW, then go based on best choice
     if position[0]-1 >= 0 and maze.m[position[0]-1][position[1]].status != "%" and maze.m[position[0]-1][position[1]].traveled == False: #checks if north is a valid node
         if maze.m[position[0]-1][position[1]].status ==".": #checks if north reaches a goal
             maze.m[position[0]-1][position[1]].parent = maze.m[position[0]][position[1]]
             return ["found",position[0]-1,position[1]]
         maze.m[position[0]-1][position[1]].parent = maze.m[position[0]][position[1]] #marks parent of north as current
+        maze.m[position[0]-1][position[1]].traveled = True #marks north as traveled
+        if debug:
+            maze.m[position[0]-1][position[1]].status = "E"
         frontier.append([position[0]-1,position[1]]) #appends north to frontier
 
     if position[1]+1 <= maze.row_length-1 and maze.m[position[0]][position[1]+1].status != "%" and maze.m[position[0]][position[1]+1].traveled == False:
@@ -38,18 +42,27 @@ def bfs(maze, position):
             maze.m[position[0]][position[1]+1].parent = maze.m[position[0]][position[1]]
             return ["found",position[0],position[1]+1]
         maze.m[position[0]][position[1]+1].parent = maze.m[position[0]][position[1]]
+        maze.m[position[0]][position[1]+1].traveled = True #marks north as traveled
+        if debug:
+            maze.m[position[0]][position[1]+1].status = "E"
         frontier.append([position[0],position[1]+1])
     if position[0]+1 <= maze.column_length-1 and maze.m[position[0]+1][position[1]].status != "%" and maze.m[position[0]+1][position[1]].traveled == False:
         if maze.m[position[0]+1][position[1]].status ==".":
             maze.m[position[0]+1][position[1]].parent = maze.m[position[0]][position[1]]
             return ["found",position[0]+1,position[1]]
         maze.m[position[0]+1][position[1]].parent = maze.m[position[0]][position[1]]
+        maze.m[position[0]+1][position[1]].traveled = True #marks north as traveled
+        if debug:
+            maze.m[position[0]+1][position[1]].status = "E"
         frontier.append([position[0]+1,position[1]])
     if position[1]-1 >= 0 and maze.m[position[0]][position[1]-1].status != "%" and maze.m[position[0]][position[1]-1].traveled == False:
         if maze.m[position[0]][position[1]-1].status ==".":
             maze.m[position[0]][position[1]-1].parent = maze.m[position[0]][position[1]]
             return ["found",position[0],position[1]-1]
         maze.m[position[0]][position[1]-1].parent = maze.m[position[0]][position[1]]
+        maze.m[position[0]][position[1]-1].traveled = True #marks north as traveled
+        if debug:
+            maze.m[position[0]][position[1]+1].status = "E"
         frontier.append([position[0],position[1]-1])
     return frontier
     
@@ -71,7 +84,7 @@ def single_bfs(file_path):
         x = 0
         for f in i:
             if f == "P":
-                sp = [y,x+1] #starting point
+                sp = [y+1,x] #starting point
             if f == ".":
                 prizes.append([y,x]) #prize location
                 ep = [y,x]
@@ -82,15 +95,27 @@ def single_bfs(file_path):
     
 
 
-    #BFS using FIFO 
-    our_deque = deque()
-    our_deque.append([sp[0],sp[1]])
+    #GBFS using FIFO 
+    our_deque = []
+    initial_heuristic = abs(ep[0] - sp[0]) + abs(ep[1] - sp[1])
+    our_deque.append([initial_heuristic,[sp[0],sp[1]]])
     maze.m[sp[0]][sp[1]].traveled = True
     expanded_nodes = 0
     path_cost = 0
+    debug = True
+    debug_count = 0
     while our_deque != []:
-        transition = bfs(maze, our_deque[len(our_deque)-1])
+        transition = bfs(maze, our_deque[0][1])
         #Goal Test
+
+        if debug:
+            if debug_count % 100 == 0:
+                for i in maze.m:
+                    x = ""
+                    for f in i:
+                        x+=f.status
+                    print(x)
+        debug_count+=1
         if transition:
             if transition[0] == "found": #found prize
                 current = maze.m[transition[1]][transition[2]]
@@ -103,16 +128,12 @@ def single_bfs(file_path):
                 md_list =[]
                 for i in transition:
                     md_list.append(abs(ep[0] - i[0]) + abs(ep[1] - i[1]))
-                minimum_heuristic = float('inf')
                 for i in range(len(md_list)):
-                    if md_list[i] < minimum_heuristic:
-                        minimum_heuristic = md_list[i]
-                        position = i
-                print(transition)
-                print(md_list)
-                our_deque.append(transition[position])
-                maze.m[transition[position][0]][transition[position][1]].traveled = True
-                expanded_nodes+=1
+                    transition[i] = [md_list[i],transition[i]]
+                for i in transition:
+                    our_deque.append(i)
+                    expanded_nodes+=1
+
                     # #[position1N, position2E, position3S]
                     # #calculate heuristics
                     # #
@@ -125,7 +146,9 @@ def single_bfs(file_path):
                     # our_deque.append(i)
                     # expanded_nodes+=1
         else:
-            our_deque.pop()
+            our_deque.pop(0)
+        our_deque = sorted(our_deque, key = lambda y: y[1], reverse=True)
+
 
     for i in maze.m:
         x = ""
