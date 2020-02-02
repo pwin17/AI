@@ -69,7 +69,7 @@ def single_bfs(file_path):
         x = 0
         for f in i:
             if f == "P":
-                sp = [y,x+1] #starting point
+                sp = [y,x] #starting point
             if f == ".":
                 prizes.append([y,x]) #prize location
             if f != "\n":
@@ -91,7 +91,8 @@ def single_bfs(file_path):
                 current = maze.m[transition[1]][transition[2]]
                 x = 100
                 while current.parent != None:
-                    current.parent.status = "#"
+                    if current.parent.status != "P":
+                        current.parent.status = "#"
                     path_cost+=1
                     current = current.parent
                 break

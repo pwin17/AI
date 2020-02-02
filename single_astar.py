@@ -26,7 +26,7 @@ class Heuristic():
 def bfs(maze, position):
     """2D maze, x and y coordinates of the starting point as input and returns goal status"""
     frontier = []
-    debug = True
+    debug = False
     #calculate manhattan distance of NESW, then go based on best choice
     if position[0]-1 >= 0 and maze.m[position[0]-1][position[1]].status != "%" and maze.m[position[0]-1][position[1]].traveled == False: #checks if north is a valid node
         if maze.m[position[0]-1][position[1]].status ==".": #checks if north reaches a goal
