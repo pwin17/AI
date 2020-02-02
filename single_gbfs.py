@@ -25,7 +25,7 @@ class Heuristic():
 def bfs(maze, position):
     """2D maze, x and y coordinates of the starting point as input and returns goal status"""
     frontier = []
-    debug = False
+    debug = True
     #calculate manhattan distance of NESW, then go based on best choice
     if position[0]-1 >= 0 and maze.m[position[0]-1][position[1]].status != "%" and maze.m[position[0]-1][position[1]].traveled == False: #checks if north is a valid node
         if maze.m[position[0]-1][position[1]].status ==".": #checks if north reaches a goal
@@ -62,7 +62,7 @@ def bfs(maze, position):
         maze.m[position[0]][position[1]-1].parent = maze.m[position[0]][position[1]]
         maze.m[position[0]][position[1]-1].traveled = True #marks north as traveled
         if debug:
-            maze.m[position[0]][position[1]+1].status = "E"
+            maze.m[position[0]][position[1]-1].status = "E"
         frontier.append([position[0],position[1]-1])
     return frontier
     
@@ -84,7 +84,7 @@ def single_bfs(file_path):
         x = 0
         for f in i:
             if f == "P":
-                sp = [y+1,x] #starting point
+                sp = [y,x] #starting point
             if f == ".":
                 prizes.append([y,x]) #prize location
                 ep = [y,x]
@@ -120,7 +120,8 @@ def single_bfs(file_path):
             if transition[0] == "found": #found prize
                 current = maze.m[transition[1]][transition[2]]
                 while current.parent != None:
-                    current.parent.status = "#"
+                    if current.parent.status != "P":
+                        current.parent.status = "#"
                     path_cost+=1
                     current = current.parent
                 break
