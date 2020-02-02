@@ -1,5 +1,6 @@
 import argparse
 from collections import deque
+import math
 
 class Node():
     def __init__(self, status = "0", parent = None):
@@ -25,7 +26,7 @@ class Heuristic():
 def bfs(maze, position):
     """2D maze, x and y coordinates of the starting point as input and returns goal status"""
     frontier = []
-    debug = False
+    debug = True
     #calculate manhattan distance of NESW, then go based on best choice
     if position[0]-1 >= 0 and maze.m[position[0]-1][position[1]].status != "%" and maze.m[position[0]-1][position[1]].traveled == False: #checks if north is a valid node
         if maze.m[position[0]-1][position[1]].status ==".": #checks if north reaches a goal
@@ -97,7 +98,7 @@ def single_bfs(file_path):
 
     #GBFS using FIFO 
     our_deque = []
-    initial_heuristic = abs(ep[0] - sp[0]) + abs(ep[1] - sp[1])
+    initial_heuristic = abs(ep[0] - sp[0]) + abs(ep[1] - sp[1]) + math.sqrt((ep[1] - sp[1])**2 + (ep[0] - ep[1])**2)  
     our_deque.append([initial_heuristic,[sp[0],sp[1]]])
     maze.m[sp[0]][sp[1]].traveled = True
     expanded_nodes = 0
@@ -109,27 +110,25 @@ def single_bfs(file_path):
         #Goal Test
 
         if debug:
-            if debug_count % 100 == 0:
+            if debug_count % 50 == 0:
                 for i in maze.m:
                     x = ""
                     for f in i:
                         x+=f.status
                     print(x)
-                # print(our_deque)
         debug_count+=1
         if transition:
             if transition[0] == "found": #found prize
                 current = maze.m[transition[1]][transition[2]]
                 while current.parent != None:
-                    if current.parent.status != "P":
-                        current.parent.status = "#"
+                    current.parent.status = "#"
                     path_cost+=1
                     current = current.parent
                 break
             else:
                 md_list =[]
                 for i in transition:
-                    md_list.append(abs(ep[0] - i[0]) + abs(ep[1] - i[1]))
+                    md_list.append(abs(ep[0] - i[0]) + abs(ep[1] - i[1])+math.sqrt((ep[1] - i[1])**2 + (ep[0] - i[1])**2)  )
                 for i in range(len(md_list)):
                     transition[i] = [md_list[i],transition[i]]
                 for i in transition:
