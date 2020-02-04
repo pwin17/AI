@@ -1,5 +1,1 @@
-                for i in maze.m:
-                    x = ""
-                    for f in i:
-                        x+=f.status
-                    print(x)
++math.sqrt((ep[1] - i[1])**2 + (ep[0] - i[1])**2) +
