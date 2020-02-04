@@ -94,9 +94,6 @@ def single_bfs(file_path):
                 maze.m[y][x] = Node(f) #Walls and paths
                 x+=1
         y+=1
-    
-
-
     #GBFS using FIFO 
     our_deque = []
     initial_heuristic = abs(ep[0] - sp[0]) + abs(ep[1] - sp[1])
@@ -131,7 +128,7 @@ def single_bfs(file_path):
                 md_list =[]
                 for i in transition:
                     maze.m[i[0]][i[1]].heuristic = maze.m[i[0]][i[1]].parent.heuristic+1
-                    md_list.append(abs(ep[0] - i[0]) + abs(ep[1] - i[1])*5 + maze.m[i[0]][i[1]].heuristic)
+                    md_list.append(abs(ep[0] - i[0]) + abs(ep[1] - i[1]) + maze.m[i[0]][i[1]].heuristic*1.00001)
                 for i in range(len(md_list)):
                     transition[i] = [md_list[i],transition[i]]
                 for i in transition:
