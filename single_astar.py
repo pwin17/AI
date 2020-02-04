@@ -2,7 +2,6 @@
 import argparse
 from collections import deque
 import math
-from scipy.spatial import distance
 
 class Node():
     def __init__(self, status = "0", parent = None):
@@ -100,7 +99,7 @@ def single_bfs(file_path):
 
     #GBFS using FIFO 
     our_deque = []
-    initial_heuristic = abs(ep[0] - sp[0]) + abs(ep[1] - sp[1]) + distance.euclidian(ep,sp)
+    initial_heuristic = abs(ep[0] - sp[0]) + abs(ep[1] - sp[1])
     our_deque.append([initial_heuristic,[sp[0],sp[1]]])
     maze.m[sp[0]][sp[1]].traveled = True
     expanded_nodes = 0
@@ -123,33 +122,22 @@ def single_bfs(file_path):
             if transition[0] == "found": #found prize
                 current = maze.m[transition[1]][transition[2]]
                 while current.parent != None:
-                    if current.parent != "P":
-                        current.parent.status = "O"
+                    if current.parent.status != "P":
+                        current.parent.status = "#"
                     path_cost+=1
                     current = current.parent
                 break
             else:
                 md_list =[]
                 for i in transition:
-                    maze.m[i[0]][i[1]].parent.heuristic +=1
-                    md_list.append(abs(ep[0] - i[0]) + abs(ep[1] - i[1])+distance.euclidian(ep,i) + maze.m[i[0]][i[1]].parent.heuristic)
+                    maze.m[i[0]][i[1]].heuristic = maze.m[i[0]][i[1]].parent.heuristic+1
+                    md_list.append(abs(ep[0] - i[0]) + abs(ep[1] - i[1])*5 + maze.m[i[0]][i[1]].heuristic)
                 for i in range(len(md_list)):
                     transition[i] = [md_list[i],transition[i]]
                 for i in transition:
                     our_deque.append(i)
                     expanded_nodes+=1
 
-                    # #[position1N, position2E, position3S]
-                    # #calculate heuristics
-                    # #
-                    # #[heuristic1, heuristic2, heuristic3] take minimum
-                    # #position = 0
-                    # #min = something
-                    # #for i in range(len(heuristic_list)):
-                    # #
-                    
-                    # our_deque.append(i)
-                    # expanded_nodes+=1
         else:
             our_deque.pop(0)
         our_deque = sorted(our_deque, key = lambda y: y[0])

@@ -1,1 +1,1 @@
-+math.sqrt((ep[1] - i[1])**2 + (ep[0] - i[1])**2) +
++ maze.m[i[0]][i[1]].heuristic)
