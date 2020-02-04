@@ -2,6 +2,7 @@
 import argparse
 from collections import deque
 import math
+from scipy.spatial import distance
 
 class Node():
     def __init__(self, status = "0", parent = None):
@@ -99,7 +100,7 @@ def single_bfs(file_path):
 
     #GBFS using FIFO 
     our_deque = []
-    initial_heuristic = abs(ep[0] - sp[0]) + abs(ep[1] - sp[1]) + math.sqrt((ep[1] - sp[1])**2 + (ep[0] - ep[1])**2)  
+    initial_heuristic = abs(ep[0] - sp[0]) + abs(ep[1] - sp[1]) + distance.euclidian(ep,sp)
     our_deque.append([initial_heuristic,[sp[0],sp[1]]])
     maze.m[sp[0]][sp[1]].traveled = True
     expanded_nodes = 0
@@ -131,7 +132,7 @@ def single_bfs(file_path):
                 md_list =[]
                 for i in transition:
                     maze.m[i[0]][i[1]].parent.heuristic +=1
-                    md_list.append(abs(ep[0] - i[0]) + abs(ep[1] - i[1])+math.sqrt((ep[1] - i[1])**2 + (ep[0] - i[1])**2) + maze.m[i[0]][i[1]].parent.heuristic)
+                    md_list.append(abs(ep[0] - i[0]) + abs(ep[1] - i[1])+distance.euclidian(ep,i) + maze.m[i[0]][i[1]].parent.heuristic)
                 for i in range(len(md_list)):
                     transition[i] = [md_list[i],transition[i]]
                 for i in transition:
