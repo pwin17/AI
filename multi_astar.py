@@ -3,6 +3,7 @@ import argparse
 from collections import deque
 import math
 import copy
+import string
 
 class Node():
     def __init__(self, status = "0", parent = None):
@@ -97,7 +98,8 @@ def single_bfs(file_path):
     total_path_cost = 0
     debug = False
     debug_count = 0
-    tracking = 1 # to replace the prizes with numbers in order of visiting
+    tracking_list = string.digits
+    tracking = 0 # to replace the prizes with numbers in order of visiting
     #GBFS using FIFO 
     while prizes:
         ## finding closest prize
@@ -120,7 +122,13 @@ def single_bfs(file_path):
             if transition:
                 if transition[0] == "found": #found prize
                     current = maze.m[transition[1]][transition[2]]
-                    maze.m[transition[1]][transition[2]].status = str(tracking)
+                    maze.m[transition[1]][transition[2]].status = tracking_list[tracking]
+                    if tracking_list[tracking] == "9":
+                        tracking_list = string.ascii_lowercase
+                    elif tracking_list[tracking] == "z":
+                        tracking_list = string.ascii_uppercase
+                    elif tracking_list[tracking] == "Z":
+                        tracking_list = string.digits
                     while current.parent != None:
                         if current.parent.status != "P":
                             current.parent.status = "#"
@@ -149,8 +157,14 @@ def single_bfs(file_path):
                     final_maze.m[i][j].status = maze.m[i][j].status
             if debug:
                 print(x)
-        sp = ep
+        
+        """
+        Sometimes astar found a prize that wasn't the EP.
+        sp = [transition[1],transition[2]] and original_maze.m[transition[1]][transition[2]].status = " "  fix those occurences.
+        """
+        sp = [transition[1],transition[2]]
         prizes.remove(sp)
+        original_maze.m[transition[1]][transition[2]].status = " " 
         maze = copy.deepcopy(original_maze)
         total_path_cost = total_path_cost + path_cost
         tracking += 1
