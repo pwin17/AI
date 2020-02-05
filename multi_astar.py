@@ -77,7 +77,7 @@ def single_bfs(file_path):
     #Create 2D array
     maze = Maze([[0 for x in range(row_length)] for y in range(col_length)], row_length, col_length)
     y = 0
-    prizes = deque()
+    prizes = []
     #create maze
     for i in infile.readlines():
         x = 0
@@ -95,9 +95,11 @@ def single_bfs(file_path):
     final_maze = copy.deepcopy(maze)
     expanded_nodes = 0
     total_path_cost = 0
-
+    debug = False
+    debug_count = 0
+    tracking = 1 # to replace the prizes with numbers in order of visiting
     #GBFS using FIFO 
-    while prizes != []:
+    while prizes:
         ## finding closest prize
         current_pdist = float("inf")
         current_prize = None
@@ -118,6 +120,7 @@ def single_bfs(file_path):
             if transition:
                 if transition[0] == "found": #found prize
                     current = maze.m[transition[1]][transition[2]]
+                    maze.m[transition[1]][transition[2]].status = str(tracking)
                     while current.parent != None:
                         if current.parent.status != "P":
                             current.parent.status = "#"
@@ -137,22 +140,26 @@ def single_bfs(file_path):
             else:
                 our_deque.pop(0)
             our_deque = sorted(our_deque, key = lambda y: y[0])
-
-            for i in range(len(maze.m)):
-                for j in range(len(maze.m[i])):
-                    if maze.m[i][j].status != "P":
-                        maze.m[i][j].status = final_maze.m[i][j]
-
-            sp = ep
-            prize.popleft()
-            maze = copy.deepcopy(original_maze)
-            total_path_cost = total_path_cost + path_cost
+        final_maze.m[transition[1]][transition[2]].status = maze.m[transition[1]][transition[2]].status
+        for i in range(len(maze.m)):
+            x = ""
+            for j in range(len(maze.m[i])):
+                x+=maze.m[i][j].status
+                if final_maze.m[i][j].status == " ":
+                    final_maze.m[i][j].status = maze.m[i][j].status
+            if debug:
+                print(x)
+        sp = ep
+        prizes.remove(sp)
+        maze = copy.deepcopy(original_maze)
+        total_path_cost = total_path_cost + path_cost
+        tracking += 1
     for i in final_maze.m:
         x = ""
         for f in i:
             x+=f.status
         print(x)
-    print(f"Path Cost: {path_cost}\nExpanded Nodes: {expanded_nodes}")
+    print(f"Path Cost: {total_path_cost}\nExpanded Nodes: {expanded_nodes}")
     
 
     '''for i in maze.m:
@@ -167,3 +174,5 @@ def single_bfs(file_path):
 # args = parser.parse_args()
 
 single_bfs("./lab_a_files/multiprize-tiny.txt")
+
+##to do -- replace prizes with strings of numbers 
