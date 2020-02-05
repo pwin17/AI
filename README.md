@@ -4,5 +4,7 @@ The python files take in the location of the input file (maze) as a command line
 The input file should contain walls represented by "%", the starting agent represented by "P", and goal(s) represented by ".".
 
 <h2>Included Pathfinding Algorithms</h2>
-Depth-first Search (single_dfs.py)
-Breadth-first Search (single_bfs.py)
+<p>Depth-first Search (single_dfs.py)</p>
+<p>Breadth-first Search (single_bfs.py)</p>
+<p>Greedy Best-first Search (single_gbfs.py)</p>
+<p>A* Search(single_astar.py)</p>
