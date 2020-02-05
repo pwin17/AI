@@ -68,10 +68,6 @@ def bfs(maze, position):
             maze.m[position[0]][position[1]-1].status = "E"
         frontier.append([position[0],position[1]-1])
     return frontier
-    
-    # if 0 <= x_pos <= maze.column_length-2 and 0 <= y_pos <= maze.row_length:
-    #     if maze.m[x_pos][y_pos].status == ".":
-    #         return "found"
 
 def single_bfs(file_path):
     infile = open(file_path, "r")
@@ -81,7 +77,7 @@ def single_bfs(file_path):
     #Create 2D array
     maze = Maze([[0 for x in range(row_length)] for y in range(col_length)], row_length, col_length)
     y = 0
-    prizes = []
+    prizes = deque()
     #create maze
     for i in infile.readlines():
         x = 0
@@ -96,52 +92,43 @@ def single_bfs(file_path):
                 x+=1
         y+=1
     original_maze = copy.deepcopy(maze)
-    
-    #GBFS using FIFO 
-    our_deque = [] #stores all possible options for next path
-    #initial_heuristic = abs(ep[0] - sp[0]) + abs(ep[1] - sp[1]) + math.sqrt(sum([(a-b)**2 for a,b in zip(sp,ep)]))  
-    #our_deque.append([initial_heuristic,[sp[0],sp[1]]])
-    maze.m[sp[0]][sp[1]].traveled = True
+    final_maze = copy.deepcopy(maze)
     expanded_nodes = 0
-    path_cost = 0
-    debug = False
-    debug_count = 0
+    total_path_cost = 0
+
+    #GBFS using FIFO 
     while prizes != []:
+        ## finding closest prize
         current_pdist = float("inf")
         current_prize = None
-        for i in prizes: ## finding closest prize
+        for i in prizes: 
             dist = abs(i[0] - sp[0]) + abs(i[1] - sp[1])
             if dist < current_pdist:
                 current_pdist = dist
                 current_prize = i
         ep = current_prize
+        path_cost = 0
+        our_deque = [] #stores all possible options for next path
+        initial_heuristic = abs(ep[0] - sp[0]) + abs(ep[1] - sp[1])  
+        our_deque.append([initial_heuristic,[sp[0],sp[1]]])
+        maze.m[sp[0]][sp[1]].traveled = True
         while our_deque != []:
             transition = bfs(maze, our_deque[0][1])
             #Goal Test
-            print(transition)
-
-            if debug:
-                if debug_count % 50 == 0:
-                    for i in maze.m:
-                        x = ""
-                        for f in i:
-                            x+=f.status
-                        print(x)
-            debug_count+=1
             if transition:
                 if transition[0] == "found": #found prize
                     current = maze.m[transition[1]][transition[2]]
                     while current.parent != None:
                         if current.parent.status != "P":
-                            current.parent.status = "O"
+                            current.parent.status = "#"
                         path_cost+=1
                         current = current.parent
                     break
                 else:
                     md_list =[]
                     for i in transition:
-                        maze.m[i[0]][i[1]].parent.heuristic +=1
-                        md_list.append(abs(ep[0] - i[0]) + abs(ep[1] - i[1])+ math.sqrt(sum([(a-b)**2 for a,b in zip(sp,ep)])) + maze.m[i[0]][i[1]].parent.heuristic)
+                        maze.m[i[0]][i[1]].heuristic = maze.m[i[0]][i[1]].parent.heuristic+1
+                        md_list.append(abs(ep[0] - i[0]) + abs(ep[1] - i[1])*3 + maze.m[i[0]][i[1]].heuristic*1.00001) #h , g
                     for i in range(len(md_list)):
                         transition[i] = [md_list[i],transition[i]]
                     for i in transition:
@@ -150,10 +137,17 @@ def single_bfs(file_path):
             else:
                 our_deque.pop(0)
             our_deque = sorted(our_deque, key = lambda y: y[0])
+
+            for i in range(len(maze.m)):
+                for j in range(len(maze.m[i])):
+                    if maze.m[i][j].status != "P":
+                        maze.m[i][j].status = final_maze.m[i][j]
+
             sp = ep
             prize.popleft()
-
-    for i in maze.m:
+            maze = copy.deepcopy(original_maze)
+            total_path_cost = total_path_cost + path_cost
+    for i in final_maze.m:
         x = ""
         for f in i:
             x+=f.status
