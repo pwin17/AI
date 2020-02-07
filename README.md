@@ -4,7 +4,7 @@ The python files take in the location of the input file (maze) as a command line
 The input file should contain walls represented by "%", the starting agent represented by "P", and goal(s) represented by ".".
 
 Command for running:
-python3 <script-name> -i <path-to-input-file>
+`python3 <script-name> -i <path-to-input-file>`
 
 <h2>Included Pathfinding Algorithms</h2>
 <p>Depth-first Search (single_dfs.py)</p>
