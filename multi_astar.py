@@ -178,7 +178,7 @@ def single_bfs(file_path):
         print(x)
     print(f"Path Cost: {total_path_cost}\nExpanded Nodes: {expanded_nodes}")
 
-single_bfs("./lab_a_files/multiprize-small.txt")
+# single_bfs("./lab_a_files/multiprize-small.txt")
 if __name__ == "__main__":   
     parser = argparse.ArgumentParser(description="Takes in maze file location and outputs")
     parser.add_argument('-i', '--input_file', type=str, metavar='', help='Name of file location')
