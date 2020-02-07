@@ -29,7 +29,7 @@ class Heuristic():
 def bfs(maze, position):
     """2D maze, x and y coordinates of the starting point as input and returns goal status"""
     frontier = []
-    debug = False
+    debug = True
     #calculate manhattan distance of NESW, then go based on best choice
     if position[0]-1 >= 0 and maze.m[position[0]-1][position[1]].status != "%" and maze.m[position[0]-1][position[1]].traveled == False: #checks if north is a valid node
         if maze.m[position[0]-1][position[1]].status ==".": #checks if north reaches a goal
@@ -116,6 +116,7 @@ def multi_astar(file_path):
         our_deque.append([initial_heuristic,[sp[0],sp[1]]])
         maze.m[sp[0]][sp[1]].traveled = True
         while our_deque != []:
+            # print(our_deque[0], "\n")
             transition = bfs(maze, our_deque[0][1])
             #Goal Test
             if transition:
@@ -141,7 +142,7 @@ def multi_astar(file_path):
                     md_list =[]
                     for i in transition:
                         maze.m[i[0]][i[1]].heuristic = maze.m[i[0]][i[1]].parent.heuristic+1
-                        md_list.append(abs(ep[0] - i[0]) + abs(ep[1] - i[1]) + maze.m[i[0]][i[1]].heuristic*1.00001) #h , g
+                        md_list.append((abs(ep[0] - i[0]) + abs(ep[1] - i[1]))*.99 + maze.m[i[0]][i[1]].heuristic) #h , g
                     for i in range(len(md_list)):
                         transition[i] = [md_list[i],transition[i]]
                     for i in transition:
