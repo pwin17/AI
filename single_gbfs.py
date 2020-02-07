@@ -94,7 +94,7 @@ def single_bfs(file_path):
     maze.m[sp[0]][sp[1]].traveled = True
     expanded_nodes = 0
     path_cost = 0
-    debug = True
+    debug = False
     debug_count = 0
     while our_deque != []:
         transition = bfs(maze, our_deque[0][1])

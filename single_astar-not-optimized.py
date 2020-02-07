@@ -124,7 +124,7 @@ def single_bfs(file_path):
                 md_list =[]
                 for i in transition:
                     maze.m[i[0]][i[1]].heuristic = maze.m[i[0]][i[1]].parent.heuristic+1
-                    md_list.append(abs(ep[0] - i[0]) + abs(ep[1] - i[1]) + maze.m[i[0]][i[1]].heuristic*1.00001)
+                    md_list.append(abs(ep[0] - i[0]) + abs(ep[1] - i[1]) + maze.m[i[0]][i[1]].heuristic)
                 for i in range(len(md_list)):
                     transition[i] = [md_list[i],transition[i]]
                 for i in transition:
