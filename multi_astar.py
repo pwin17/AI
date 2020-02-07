@@ -70,7 +70,7 @@ def bfs(maze, position):
         frontier.append([position[0],position[1]-1])
     return frontier
 
-def single_bfs(file_path):
+def multi_astar(file_path):
     infile = open(file_path, "r")
     row_length = len(infile.readline())-1 #excluding '\n'
     col_length = len(infile.readlines())+1 #first line plus the rest
@@ -97,7 +97,6 @@ def single_bfs(file_path):
     expanded_nodes = 0
     total_path_cost = 0
     debug = False
-    debug_count = 0
     tracking_list = string.digits
     tracking = 0 # to replace the prizes with numbers in order of visiting
     #GBFS using FIFO 
@@ -183,6 +182,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Takes in maze file location and outputs")
     parser.add_argument('-i', '--input_file', type=str, metavar='', help='Name of file location')
     args = parser.parse_args()
-    single_bfs(args.input_file)
+    multi_astar(args.input_file)
 
 ##to do -- replace prizes with strings of numbers 
