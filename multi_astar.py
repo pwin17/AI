@@ -142,7 +142,7 @@ def single_bfs(file_path):
                     md_list =[]
                     for i in transition:
                         maze.m[i[0]][i[1]].heuristic = maze.m[i[0]][i[1]].parent.heuristic+1
-                        md_list.append(abs(ep[0] - i[0]) + abs(ep[1] - i[1])*3 + maze.m[i[0]][i[1]].heuristic*1.00001) #h , g
+                        md_list.append(abs(ep[0] - i[0]) + abs(ep[1] - i[1]) + maze.m[i[0]][i[1]].heuristic*1.00001) #h , g
                     for i in range(len(md_list)):
                         transition[i] = [md_list[i],transition[i]]
                     for i in transition:
@@ -190,6 +190,6 @@ def single_bfs(file_path):
 # parser.add_argument('-i', '--input_file', type=str, metavar='', help='Name of file location')
 # args = parser.parse_args()
 
-single_bfs("./lab_a_files/multiprize-medium.txt")
+single_bfs("./lab_a_files/multiprize-small.txt")
 
 ##to do -- replace prizes with strings of numbers 
