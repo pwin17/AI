@@ -67,10 +67,6 @@ def bfs(maze, position):
             maze.m[position[0]][position[1]-1].status = "E"
         frontier.append([position[0],position[1]-1])
     return frontier
-    
-    # if 0 <= x_pos <= maze.column_length-2 and 0 <= y_pos <= maze.row_length:
-    #     if maze.m[x_pos][y_pos].status == ".":
-    #         return "found"
 
 def single_bfs(file_path):
     infile = open(file_path, "r")
@@ -145,17 +141,9 @@ def single_bfs(file_path):
             x+=f.status
         print(x)
     print(f"Path Cost: {path_cost}\nExpanded Nodes: {expanded_nodes}")
-    
 
-    '''for i in maze.m:
-        x = ""
-        for f in i:
-            x+=f.status
-        print(x)'''
-
-    
-# parser = argparse.ArgumentParser(description="Takes in maze file location and outputs")
-# parser.add_argument('-i', '--input_file', type=str, metavar='', help='Name of file location')
-# args = parser.parse_args()
-
-single_bfs("./lab_a_files/1prize-open.txt")
+if __name__ == "__main__":  
+    parser = argparse.ArgumentParser(description="Takes in maze file location and outputs")
+    parser.add_argument('-i', '--input_file', type=str, metavar='', help='Name of file location')
+    args = parser.parse_args()
+    single_bfs(args.input_file)
