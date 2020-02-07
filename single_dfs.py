@@ -1,5 +1,4 @@
 import argparse
-from collections import deque
 #hash table to store traveled
 #traveled_set[00] = True
 #example: If examining north:

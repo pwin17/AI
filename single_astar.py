@@ -1,7 +1,5 @@
 
 import argparse
-from collections import deque
-import math
 
 class Node():
     def __init__(self, status = "0", parent = None):

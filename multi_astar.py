@@ -1,7 +1,5 @@
 
 import argparse
-from collections import deque
-import math
 import copy
 import string
 
