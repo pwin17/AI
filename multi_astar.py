@@ -125,10 +125,13 @@ def single_bfs(file_path):
                     maze.m[transition[1]][transition[2]].status = tracking_list[tracking]
                     if tracking_list[tracking] == "9":
                         tracking_list = string.ascii_lowercase
+                        tracking = -1
                     elif tracking_list[tracking] == "z":
                         tracking_list = string.ascii_uppercase
+                        tracking = -1
                     elif tracking_list[tracking] == "Z":
                         tracking_list = string.digits
+                        tracking = -1
                     while current.parent != None:
                         if current.parent.status != "P":
                             current.parent.status = "#"
@@ -187,6 +190,6 @@ def single_bfs(file_path):
 # parser.add_argument('-i', '--input_file', type=str, metavar='', help='Name of file location')
 # args = parser.parse_args()
 
-single_bfs("./lab_a_files/multiprize-tiny.txt")
+single_bfs("./lab_a_files/multiprize-medium.txt")
 
 ##to do -- replace prizes with strings of numbers 
