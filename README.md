@@ -5,6 +5,7 @@ The input file should contain walls represented by "%", the starting agent repre
 
 Command for running:
 `python3 <script-name> -i <path-to-input-file>`
+<p>The folder Maze_Outputs contains the outputs of each pathfinding algorithm for each testcase (lab_a_files).<p>
 
 <h2>Included Pathfinding Algorithms</h2>
 <p>Depth-first Search (single_dfs.py)</p>
