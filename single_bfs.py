@@ -1,5 +1,6 @@
 import argparse
 from collections import deque
+import time
 
 class Node():
     def __init__(self, status = "0", parent = None):
@@ -117,8 +118,20 @@ def single_bfs(file_path):
             x+=f.status
         print(x)'''
 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Takes in maze file location and outputs")
     parser.add_argument('-i', '--input_file', type=str, metavar='', help='Name of file location')
-    args = parser.parse_args()
-    single_bfs(args.input_file)
+    try:
+        args = parser.parse_args()
+        single_bfs(args.input_file)
+    except:
+        time1 = time.time()
+        single_bfs("./lab_a_files/1prize-open.txt")
+        print(f"Runtime for 1prize-open.txt: {round(time.time() - time1,5)}\n")
+        time2 = time.time()
+        single_bfs("./lab_a_files/1prize-medium.txt")
+        print(f"Runtime for 1prize-medium.txt: {round(time.time() - time2,5)}\n")
+        time3 = time.time()
+        single_bfs("./lab_a_files/1prize-large.txt")
+        print(f"Runtime for 1prize-large.txt: {round(time.time() - time3,5)}\n")

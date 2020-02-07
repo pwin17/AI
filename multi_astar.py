@@ -2,6 +2,7 @@
 import argparse
 import copy
 import string
+import time
 
 class Node():
     def __init__(self, status = "0", parent = None):
@@ -140,7 +141,7 @@ def multi_astar(file_path):
                     md_list =[]
                     for i in transition:
                         maze.m[i[0]][i[1]].heuristic = maze.m[i[0]][i[1]].parent.heuristic+1
-                        md_list.append((abs(ep[0] - i[0]) + abs(ep[1] - i[1])) + maze.m[i[0]][i[1]].heuristic*1.00001) #h , g
+                        md_list.append((abs(ep[0] - i[0]) + abs(ep[1] - i[1]))*.99 + maze.m[i[0]][i[1]].heuristic) #h , g
                     for i in range(len(md_list)):
                         transition[i] = [md_list[i],transition[i]]
                     for i in transition:
@@ -179,7 +180,19 @@ def multi_astar(file_path):
 if __name__ == "__main__":   
     parser = argparse.ArgumentParser(description="Takes in maze file location and outputs")
     parser.add_argument('-i', '--input_file', type=str, metavar='', help='Name of file location')
-    args = parser.parse_args()
-    multi_astar(args.input_file)
+    
+    try:
+        args = parser.parse_args()
+        multi_astar(args.input_file)
+    except:
+        time1 = time.time()
+        multi_astar("./lab_a_files/multiprize-tiny.txt")
+        print(f"Runtime for 1prize-open.txt: {round(time.time() - time1,5)}\n")
+        time2 = time.time()
+        multi_astar("./lab_a_files/multiprize-small.txt")
+        print(f"Runtime for 1prize-medium.txt: {round(time.time() - time2,5)}\n")
+        time3 = time.time()
+        multi_astar("./lab_a_files/multiprize-medium.txt")
+        print(f"Runtime for 1prize-large.txt: {round(time.time() - time3,5)}\n")
 
 ##to do -- replace prizes with strings of numbers 
