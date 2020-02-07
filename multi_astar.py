@@ -174,19 +174,11 @@ def single_bfs(file_path):
             x+=f.status
         print(x)
     print(f"Path Cost: {total_path_cost}\nExpanded Nodes: {expanded_nodes}")
-    
 
-    '''for i in maze.m:
-        x = ""
-        for f in i:
-            x+=f.status
-        print(x)'''
-
-    
-# parser = argparse.ArgumentParser(description="Takes in maze file location and outputs")
-# parser.add_argument('-i', '--input_file', type=str, metavar='', help='Name of file location')
-# args = parser.parse_args()
-
-single_bfs("./lab_a_files/multiprize-tiny.txt")
+if __name__ == "__main__":   
+    parser = argparse.ArgumentParser(description="Takes in maze file location and outputs")
+    parser.add_argument('-i', '--input_file', type=str, metavar='', help='Name of file location')
+    args = parser.parse_args()
+    single_bfs(args.input_file)
 
 ##to do -- replace prizes with strings of numbers 

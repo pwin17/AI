@@ -1,5 +1,4 @@
 import argparse
-from collections import deque
 
 class Node():
     def __init__(self, status = "0", parent = None):
@@ -65,10 +64,6 @@ def bfs(maze, position):
             maze.m[position[0]][position[1]-1].status = "E"
         frontier.append([position[0],position[1]-1])
     return frontier
-    
-    # if 0 <= x_pos <= maze.column_length-2 and 0 <= y_pos <= maze.row_length:
-    #     if maze.m[x_pos][y_pos].status == ".":
-    #         return "found"
 
 def single_bfs(file_path):
     infile = open(file_path, "r")
@@ -92,9 +87,6 @@ def single_bfs(file_path):
                 maze.m[y][x] = Node(f) #Walls and paths
                 x+=1
         y+=1
-    
-
-
     #GBFS using FIFO 
     our_deque = []
     initial_heuristic = abs(ep[0] - sp[0]) + abs(ep[1] - sp[1])
@@ -107,7 +99,6 @@ def single_bfs(file_path):
     while our_deque != []:
         transition = bfs(maze, our_deque[0][1])
         #Goal Test
-
         if debug:
             if debug_count % 100 == 0:
                 for i in maze.m:
@@ -135,23 +126,10 @@ def single_bfs(file_path):
                 for i in transition:
                     our_deque.append(i)
                     expanded_nodes+=1
-
-                    # #[position1N, position2E, position3S]
-                    # #calculate heuristics
-                    # #
-                    # #[heuristic1, heuristic2, heuristic3] take minimum
-                    # #position = 0
-                    # #min = something
-                    # #for i in range(len(heuristic_list)):
-                    # #
-                    
-                    # our_deque.append(i)
-                    # expanded_nodes+=1
         else:
             our_deque.pop(0)
         our_deque = sorted(our_deque, key = lambda y: y[0])
-
-
+    #printing results
     for i in maze.m:
         x = ""
         for f in i:
@@ -159,16 +137,8 @@ def single_bfs(file_path):
         print(x)
     print(f"Path Cost: {path_cost}\nExpanded Nodes: {expanded_nodes}")
     
-
-    '''for i in maze.m:
-        x = ""
-        for f in i:
-            x+=f.status
-        print(x)'''
-
-    
-# parser = argparse.ArgumentParser(description="Takes in maze file location and outputs")
-# parser.add_argument('-i', '--input_file', type=str, metavar='', help='Name of file location')
-# args = parser.parse_args()
-
-single_bfs("./lab_a_files/1prize-open.txt")
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Takes in maze file location and outputs")
+    parser.add_argument('-i', '--input_file', type=str, metavar='', help='Name of file location')
+    args = parser.parse_args()
+    single_bfs(args.input_file)
