@@ -1,9 +1,12 @@
-time1 = time.time()
-single_astar("./lab_a_files/1prize-open.txt")
-print(f"Runtime for 1prize-open.txt: {round(time.time() - time1,5)}\n")
-time2 = time.time()
-single_astar("./lab_a_files/1prize-medium.txt")
-print(f"Runtime for 1prize-medium.txt: {round(time.time() - time2,5)}\n")
-time3 = time.time()
-single_astar("./lab_a_files/1prize-large.txt")
-print(f"Runtime for 1prize-large.txt: {round(time.time() - time3,5)}\n")
+            # print(our_deque[0])
+            # for f in our_deque:
+            #     min_heuristic = float("inf")
+            #     for i in prizes:
+            #         dist = abs(i[0] - f[1][0]) + abs(i[1] - f[1][1])*.99 + maze.m[f[1][0]][f[1][1]].heuristic
+            #         if min_heuristic > dist:
+            #             min_heuristic = dist
+            #         if dist < current_pdist:
+            #             current_pdist = dist
+            #             current_prize = i
+            #     f[0] = min_heuristic
+            #     ep = current_prize

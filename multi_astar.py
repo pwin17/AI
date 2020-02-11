@@ -185,14 +185,17 @@ if __name__ == "__main__":
         args = parser.parse_args()
         multi_astar(args.input_file)
     except:
+        time0 = time.time()
+        multi_astar("./lab_a_files/multiprize-micro.txt")
+        print(f"Runtime for multiprize-micro.txt: {round(time.time() - time0,5)}\n")
         time1 = time.time()
         multi_astar("./lab_a_files/multiprize-tiny.txt")
-        print(f"Runtime for 1prize-open.txt: {round(time.time() - time1,5)}\n")
+        print(f"Runtime for multiprize-tiny.txt: {round(time.time() - time1,5)}\n")
         time2 = time.time()
         multi_astar("./lab_a_files/multiprize-small.txt")
-        print(f"Runtime for 1prize-medium.txt: {round(time.time() - time2,5)}\n")
+        print(f"Runtime for multiprize-small.txt: {round(time.time() - time2,5)}\n")
         time3 = time.time()
         multi_astar("./lab_a_files/multiprize-medium.txt")
-        print(f"Runtime for 1prize-large.txt: {round(time.time() - time3,5)}\n")
+        print(f"Runtime for multiprize-medium.txt: {round(time.time() - time3,5)}\n")
 
 ##to do -- replace prizes with strings of numbers 
