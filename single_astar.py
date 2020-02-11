@@ -1,6 +1,7 @@
 
 import argparse
 import time
+
 class Node():
     def __init__(self, status = "0", parent = None):
         self.status = status
@@ -140,12 +141,13 @@ def single_astar(file_path):
         print(x)
     print(f"Path Cost: {path_cost}\nExpanded Nodes: {expanded_nodes}")
 
+
 if __name__ == "__main__":  
     parser = argparse.ArgumentParser(description="Takes in maze file location and outputs")
     parser.add_argument('-i', '--input_file', type=str, metavar='', help='Name of file location')
     try:
         args = parser.parse_args()
-        single_bfs(args.input_file)
+        single_astar(args.input_file)
     except:
         time1 = time.time()
         single_astar("./lab_a_files/1prize-open.txt")

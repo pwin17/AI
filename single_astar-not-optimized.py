@@ -123,7 +123,7 @@ def single_astar(file_path):
                 md_list =[]
                 for i in transition:
                     maze.m[i[0]][i[1]].heuristic = maze.m[i[0]][i[1]].parent.heuristic+1
-                    md_list.append((abs(ep[0] - i[0]) + abs(ep[1] - i[1]))*.99 + maze.m[i[0]][i[1]].heuristic)
+                    md_list.append((abs(ep[0] - i[0]) + abs(ep[1] - i[1])) + maze.m[i[0]][i[1]].heuristic)
                 for i in range(len(md_list)):
                     transition[i] = [md_list[i],transition[i]]
                 for i in transition:
@@ -147,7 +147,7 @@ if __name__ == "__main__":
     parser.add_argument('-i', '--input_file', type=str, metavar='', help='Name of file location')
     try:
         args = parser.parse_args()
-        single_bfs(args.input_file)
+        single_astar(args.input_file)
     except:
         time1 = time.time()
         single_astar("./lab_a_files/1prize-open.txt")
